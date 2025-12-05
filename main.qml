@@ -12,8 +12,12 @@ Window {
     maximumWidth: width
     minimumHeight: height
     maximumHeight: height
-    flags: Qt.FramelessWindowHint
+    // flags: Qt.FramelessWindowHint
+    flags: Qt.FramelessWindowHint | Qt.WindowStaysOnBottomHint
+    // flags: Qt.FramelessWindowHint | Qt.X11BypassWindowManagerHint | Qt.WindowStaysOnBottomHint
     color: "transparent"
+
+    property var launcherClass: launcher // ive been stuck for 3 WHOLE HOURS trying to get this into AppIcon.qml, this was the fix?????
 
     Rectangle {
     	width: parent.width - 20
@@ -35,8 +39,15 @@ Window {
     		cellWidth: 95 + 20
     		cellHeight: 95 + 20
     		model: apps
+    		// model: launcher.launch_item("vlc", "")
 
-    		delegate: AppIcon {}
+    		delegate: AppIcon {
+    			// launcher: launcher
+    			launcher: window.launcherClass // weird workaround i think, to get launcher function in the element 
+    			name: apps[index].name
+    			src: apps[index].src.toString()
+    			exec: apps[index].exec
+    		}
        	}
     }
 }

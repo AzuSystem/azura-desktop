@@ -4,11 +4,16 @@ import QtGraphicalEffects 1.12
 
 
     	Button {
+
+    		property QtObject launcher: null
+    	
     		width: 95 + 20
     		height: 95 + 20
 
     		property string src: "assets/config.svg"
     		property string name: "App Name"
+    		property string exec: ""
+    		// property var launchr
 
 
     		background: Rectangle {
@@ -40,8 +45,12 @@ import QtGraphicalEffects 1.12
 		    			height: parent.height
 		    			hoverEnabled: true
 
-		    			onEntered: parent.color = "#12ffffff", parent.border.color = "#20ffffff"
+		    			onEntered: parent.color = "#12ffffff", parent.border.color = "#20ffffff", console.log(src)
 		    			onExited: parent.color = "#01ffffff", parent.border.color = "#12ffffff"
+		    			onClicked: {
+		    				console.log(exec)
+		    				launcher.launch_item(exec, "")
+		    			}
 		    		}
 	    		}
 
@@ -59,8 +68,11 @@ import QtGraphicalEffects 1.12
 
 		   			Text {
 		   				text: name
+		   				width: 64
 		   				color: "#ffffff"
 		   				anchors.horizontalCenter: parent.horizontalCenter
+		   				horizontalAlignment: Text.AlignHCenter
+		   				elide: Text.ElideRight
 		   			}
 		   		}
 		   	}
@@ -76,13 +88,13 @@ import QtGraphicalEffects 1.12
 	        //     verticalOffset: 12
 	        // }
 	      
-	        // DropShadow {
-	        //     // anchors.centerIn: de
-	        //     anchors.fill: desktopIcon
-	        //     source: desktopIcon
-	        //     color: "#4B000000"
-	        //     radius: 7
-	        //     horizontalOffset: 0
-	        //     verticalOffset: 2
-	        // }
+	        DropShadow {
+	            anchors.fill: desktopIcon
+	            source: desktopIcon
+	            color: "#4b000000"
+	            radius: 7
+	            samples: 64 
+	            horizontalOffset: 0
+	            verticalOffset: 2
+	        }
     	}
