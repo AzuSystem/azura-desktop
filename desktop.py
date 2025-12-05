@@ -1,7 +1,7 @@
 import sys
 import os
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QPushButton
-from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QPushButton, QToolButton, QGraphicsDropShadowEffect
+from PyQt5.QtGui import QIcon, QColor
 from PyQt5.QtCore import Qt, QSize
 
 # Simulated app icons
@@ -60,7 +60,7 @@ desktop = QWidget()
 desktop.setWindowFlags(Qt.FramelessWindowHint)  # No borders, always on top
 desktop.setAttribute(Qt.WA_TranslucentBackground)  
 desktop.setAttribute(Qt.WA_NoSystemBackground)
-desktop.setWindowTitle("AzuOS Desktop")
+desktop.setWindowTitle("AzuOSDesktop")
 
 # Set the window size to something reasonable for the icons (optional)
 screen = app.primaryScreen().availableGeometry()
@@ -73,28 +73,40 @@ layout.setContentsMargins(20, 20, 20, 20)  # Margins for top-left padding
 
 # Load icons
 icons = load_icons()
+# print(icons)
 
 for i, app_info in enumerate(icons):
-    btn = QPushButton()
+    btn = QToolButton()
     if os.path.exists(app_info["icon"]):
         btn.setIcon(QIcon(app_info["icon"]))
+        # print(app_info["icon"])
     else:
-        btn.setText(app_info["name"])  # Fallback text if icon is not found
-    
+        btn.setIcon(QIcon.fromTheme(app_info["icon"], QIcon("assets/icons/questionmark.svg")))
+
+    btn.setText(app_info["name"])
+    btn.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)    
+    btn.setAutoFillBackground(False)
     btn.setIconSize(QSize(64, 64))
-    btn.setFixedSize(100, 100)
+    btn.setFixedSize(95, 95)
     btn.setStyleSheet('''
-        QPushButton {
-            background-color: rgba(255, 255, 255, 7%);
-            border: none;
+        QToolButton {
+            background-color: rgba(255, 255, 255, 0%);
+            border: 1px solid rgba(255, 255, 255, 7%);
             border-radius: 8px;
+            padding: 5px
         }
-        QPushButton:hover {
-            background-color: rgba(255, 255, 255, 50%);
+        QToolButton:hover {
+            background-color: rgba(255, 255, 255, 7%);
         }
     ''')
     btn.setToolTip(app_info["name"])
-    btn.clicked.connect(lambda checked=False, cmd=app_info["exec"]: os.system(f"{cmd} &"))
+    shadow = QGraphicsDropShadowEffect(btn)
+    shadow.setBlurRadius(7)
+    shadow.setOffset(0,2)
+    shadow.setColor(QColor(0,0,0,75))
+
+    btn.setGraphicsEffect(shadow)
+    btn.clicked.connect(lambda checked=False, cmd=app_info["exec"]: os.system(f"{cmd}"))
     
     # Add the button to the grid layout
     layout.addWidget(btn, i // 5, i % 5)  # 5 icons per row
