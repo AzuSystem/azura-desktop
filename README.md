@@ -1,2 +1,2 @@
-# azuos-desktop
- Desktop for AzuOS ( The icons present on screen )
+# azura-desktop
+ Desktop Area for Azura
