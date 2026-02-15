@@ -10,9 +10,9 @@ import QtGraphicalEffects 1.12
     		width: 95 + 20
     		height: 95 + 20
 
-    		property string src: "assets/config.svg"
+    		property string src: "assets/config.svg" // app icon
     		property string name: "App Name"
-    		property string exec: ""
+    		property string path: ""
     		// property var launchr
 
 
@@ -48,8 +48,8 @@ import QtGraphicalEffects 1.12
 		    			onEntered: parent.color = "#12ffffff", parent.border.color = "#20ffffff", console.log(src)
 		    			onExited: parent.color = "#01ffffff", parent.border.color = "#12ffffff"
 		    			onClicked: {
-		    				console.log(exec)
-		    				launcher.launch_item(exec, "")
+		    				console.log(path)
+		    				launcher.launch_item(path, "")
 		    			}
 		    		}
 	    		}

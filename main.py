@@ -31,16 +31,14 @@ def fetch_desktop():
 			
 			name = None
 			icon = None
-			exec_cmd = None
 			for line in content:
 				if line.startswith('Name='):
 					name = line.strip().split('=')[1]
 				elif line.startswith('Icon='):
 					icon = line.strip().split('=')[1]
-				elif line.startswith('Exec='):
-					exec_cmd = line.strip().split('=')[1]
 
-			if name and exec_cmd:
+
+			if name:
 				# it's time i cook up some dodgy black magic for theme matching icons :sob:
 				pixmap = QIcon.fromTheme(icon, QIcon("assets/config.svg")).pixmap(64, 64)
 				pixmap.save("/tmp/azura-desktop-area-icon-previews/" + icon + ".png")
@@ -54,15 +52,15 @@ def fetch_desktop():
 					"type": "app",
 					# "src": "file://" + icon_path,
 					# "src": QIcon.fromTheme(icon_path, QIcon("assets/config.svg")),
-					"src": "/tmp/azura-desktop-area-icon-previews/" + icon_path,
-					"exec": exec_cmd
+					"icon": "/tmp/azura-desktop-area-icon-previews/" + icon_path,
+					"path": file_path
 				})
 		else:
 			icons.append({
 				"name": filename,
 				"type": "unknown",
-				"src": "assets/config.svg",
-				"exec": ""
+				"icon": "assets/config.svg",
+				"icon": file_path
 			})
 
 	return icons
@@ -72,11 +70,15 @@ print(fetch_desktop())
 class Launcher(QObject):
 	@pyqtSlot(str, str) # (command, type) parametersss yeaaa
 	def launch_item(self, command, type=""):
-		for placeholder in ["%U", "%F", "%i", "%c", "%k"]: # weird stuff in .desktop files, i should probably learn them-
-			command = command.replace(placeholder, "")
-			print(command)
-		args = shlex.split(command)
-		subprocess.Popen(args, start_new_session=True)
+		# for placeholder in ["%U", "%F", "%i", "%c", "%k"]: # weird stuff in .desktop files, i should probably learn them-
+		# 	command = command.replace(placeholder, "")
+		# 	print(command)
+		# args = shlex.split(command)
+		# subprocess.Popen(args, start_new_session=True)
+
+		subprocess.Popen(["dex", command], start_new_session=True)
+
+		print(command)
 
 engine = QQmlApplicationEngine()
 engine.quit.connect(app.quit)

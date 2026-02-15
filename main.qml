@@ -45,8 +45,8 @@ Window {
     			// launcher: launcher
     			launcher: window.launcherClass // weird workaround i think, to get launcher function in the element 
     			name: apps[index].name
-    			src: apps[index].src.toString()
-    			exec: apps[index].exec
+    			src: apps[index].icon.toString() // src is the app icon
+    			path: apps[index].path
     		}
        	}
     }
