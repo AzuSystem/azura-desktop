@@ -72,6 +72,7 @@ Button {
 				anchors.horizontalCenter: parent.horizontalCenter
 				horizontalAlignment: Text.AlignHCenter
 				elide: Text.ElideRight
+				renderType: Text.CurveRendering
 			}
 
 		}
