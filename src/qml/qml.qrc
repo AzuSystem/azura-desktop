@@ -1,0 +1,7 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/">
+        <file>layouts/Desktop.qml</file>
+        <file>layouts/AppIcon.qml</file>
+    </qresource>
+</RCC>

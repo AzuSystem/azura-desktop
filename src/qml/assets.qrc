@@ -1,0 +1,7 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/">
+        <file>assets/unknown.svg</file>
+        <file>assets/config.svg</file>
+    </qresource>
+</RCC>
