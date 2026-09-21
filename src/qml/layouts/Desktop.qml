@@ -17,9 +17,7 @@ Window {
     flags: Qt.FramelessWindowHint | Qt.WindowStaysOnBottomHint
     // flags: Qt.FramelessWindowHint | Qt.X11BypassWindowManagerHint | Qt.WindowStaysOnBottomHint
     color: "transparent"
-
-    property var launcherClass: launcher // ive been stuck for 3 WHOLE HOURS trying to get this into AppIcon.qml, this was the fix?????
-
+	
 	DesktopList {
 		id: desktopList
 	}
@@ -49,8 +47,6 @@ Window {
     		// model: launcher.launch_item("vlc", "")
 
     		delegate: AppIcon {
-    			// launcher: launcher
-    			launcher: window.launcherClass // weird workaround i think, to get launcher function in the element 
     			name: modelData.name
     			src: modelData.icon // src is the app icon
     			path: modelData.path

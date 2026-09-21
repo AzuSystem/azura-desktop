@@ -22,7 +22,9 @@ pub mod qobject {
         #[cxx_name = "fetchDesktop"]
         fn fetch_desktop(self: &DesktopList) -> QString;
 
-
+        #[qinvokable]
+        #[cxx_name = "launchEntry"]
+        fn launch_entry(self: &DesktopList, exec: &QString, entry_type: &QString);
 
 
     }
@@ -65,13 +67,13 @@ impl qobject::DesktopList {
                             .find()
                             .map(|path|path.to_string_lossy().into_owned())
                             .unwrap_or_else(|| "qrc:/assets/config.svg".to_string());
-                        let file_exec = file.exec().unwrap_or_default().to_string();
+                        // let file_exec = file.exec().unwrap_or_default().to_string();
 
                         let app = DesktopIcon {
                             name: file_name,
                             entry_type: "app".to_string(),
                             icon: "file://".to_string() + &file_icon,
-                            path: file_exec,
+                            path: entry.path().to_string_lossy().to_string(),
                         };
 
                         icons.push(app);
@@ -81,6 +83,13 @@ impl qobject::DesktopList {
         }
 
         QString::from(serde_json::to_string(&icons).unwrap())
+    }
+
+    pub fn launch_entry(&self, file: &QString, entry_type: &QString) {
+        std::process::Command::new("dex")
+            .arg(file.to_string())
+            .spawn()
+            .unwrap();
     }
 }
 

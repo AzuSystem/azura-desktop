@@ -1,11 +1,10 @@
 import QtQuick
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
+import com.azusystem.azura
 
 
 Button {
-	property QtObject launcher: null
-
 	width: 95 + 20
 	height: 95 + 20
 
@@ -15,6 +14,10 @@ Button {
 	property string name: "App Name"
 	property string path: ""
 	// property var launchr
+
+	DesktopList {
+		id: desktopList
+	}
 
 	Behavior on scale {
 		NumberAnimation {
@@ -64,7 +67,7 @@ Button {
 				onEntered: console.log(src)
 				onClicked: {
 					console.log(path)
-					launcher.launch_item(path, "")
+					desktopList.launchEntry(path, "")
 				}
 			}
 		}
