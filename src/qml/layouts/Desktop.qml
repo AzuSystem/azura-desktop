@@ -1,6 +1,6 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Window 2.15
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Window
 
 Window {
 	id: window
@@ -25,20 +25,22 @@ Window {
     	color: "#00ffffff"
     	anchors.centerIn: parent
 
-		// ListModel {
-		// 	id: apps
-    	// 	ListElement { name: "App Name" }
-    	// 	ListElement { name: "App Name" }
-    	// 	ListElement { name: "App Name" }
-    	// 	ListElement { name: "App Name" }
-    	// 	ListElement { name: "App Name" }
-    	// }
+		ListModel {
+			id: apps
+    		ListElement { name: "App Name" }
+    		ListElement { name: "App Name" }
+    		ListElement { name: "App Name" }
+    		ListElement { name: "App Name" }
+    		ListElement { name: "App Name" }
+    	}
 
     	GridView {
     		anchors.fill: parent
     		cellWidth: 95 + 20
     		cellHeight: 95 + 20
     		model: apps
+    		interactive: false
+    		keyNavigationEnabled: true
     		// model: launcher.launch_item("vlc", "")
 
     		delegate: AppIcon {
