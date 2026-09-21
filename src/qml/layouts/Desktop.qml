@@ -25,14 +25,14 @@ Window {
     	color: "#00ffffff"
     	anchors.centerIn: parent
 
-		ListModel {
-			id: apps
-    		ListElement { name: "App Name" }
-    		ListElement { name: "App Name" }
-    		ListElement { name: "App Name" }
-    		ListElement { name: "App Name" }
-    		ListElement { name: "App Name" }
-    	}
+		// ListModel {
+		// 	id: apps
+    	// 	ListElement { name: "App Name" }
+    	// 	ListElement { name: "App Name" }
+    	// 	ListElement { name: "App Name" }
+    	// 	ListElement { name: "App Name" }
+    	// 	ListElement { name: "App Name" }
+    	// }
 
     	GridView {
     		anchors.fill: parent

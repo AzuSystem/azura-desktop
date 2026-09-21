@@ -15,42 +15,70 @@ pub mod qobject {
         // based on the Rust struct MyObjectRust.
         #[qobject]
         #[qml_element]
-        #[qproperty(i32, number)]
-        #[qproperty(QString, string)]
-        #[namespace = "my_object"]
-        type MyObject = super::MyObjectRust;
+        type DesktopList = super::DesktopListRust;
 
         // Declare the invokable methods we want to expose on the QObject
         #[qinvokable]
-        #[cxx_name = "incrementNumber"]
-        fn increment_number(self: Pin<&mut Self>);
-
-        #[qinvokable]
-        #[cxx_name = "sayHi"]
-        fn say_hi(&self, string: &QString, number: i32);
+        #[cxx_name = "fetchDesktop"]
+        fn fetch_desktop(self: &DesktopList) -> QString;
     }
 }
 
 use core::pin::Pin;
 use cxx_qt_lib::QString;
+use directories::UserDirs;
+use std::fs;
+use freedesktop_icons;
+use freedesktop_desktop_entry::DesktopEntry;
+use serde::Serialize;
+
+#[derive(Default)]
+pub struct DesktopListRust;
 
 /// The Rust struct for the QObject
-#[derive(Default)]
-pub struct MyObjectRust {
-    number: i32,
-    string: QString,
+#[derive(Clone, Serialize)]
+struct DesktopIcon {
+    name: String,
+    entry_type: String,
+    icon: String,
+    path: String,
 }
 
-impl qobject::MyObject {
-    /// Increment the number Q_PROPERTY
-    pub fn increment_number(self: Pin<&mut Self>) {
-        let previous = *self.number();
-        self.set_number(previous + 1);
-    }
+impl qobject::DesktopList {
+    pub fn fetch_desktop(&self) -> QString {
+        let mut icons: Vec<DesktopIcon> = Vec::new();
 
-    /// Print a log message with the given string and number
-    pub fn say_hi(&self, string: &QString, number: i32) {
-        println!("Hi from Rust! String is '{string}' and number is {number}");
+        if let Some(user_path) = UserDirs::new() {
+            if let Some(desktop_path) = user_path.desktop_dir() {
+                for entry in fs::read_dir(desktop_path).unwrap() {
+                    let entry = entry.unwrap();
+                    if entry.path().extension().is_some_and(|ext|ext == "desktop") {
+                        let file = DesktopEntry::from_path(entry.path(), None::<&[&str]>).unwrap();
+
+                        let file_name = file.name(&["en"]).unwrap_or_default().to_string();
+                        let file_icon = freedesktop_icons::lookup(file.icon().unwrap_or_default().to_string().as_str())
+                            .with_size(64)
+                            .find()
+                            .map(|path|path.to_string_lossy().into_owned())
+                            .unwrap_or_else(|| "qrc:/assets/config.svg".to_string());
+                        let file_exec = file.exec().unwrap_or_default().to_string();
+
+                        let app = DesktopIcon {
+                            name: file_name,
+                            entry_type: "app".to_string(),
+                            icon: file_icon,
+                            path: file_exec,
+                        };
+
+                        icons.push(app);
+                    }
+                }
+            }
+        }
+
+        QString::from(serde_json::to_string(&icons).unwrap())
     }
 }
+
+
 
