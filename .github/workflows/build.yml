@@ -1,0 +1,36 @@
+name: Compile Desktop Binary
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    container:
+      image: debian:trixie
+      options: --privileged
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Build Environment
+      run: |
+        apt update
+        apt install -y qt6-base-dev qt6-declarative-dev qt6-5compat-dev rustup clang
+        rustup default stable
+        
+    - name: Build
+      run: cargo build --verbose --release
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4.6.2
+      with:
+        name: azura-desktop
+        path: target/release/azura-desktop
