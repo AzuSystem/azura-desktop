@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Window
+import com.azusystem.azura
 
 Window {
 	id: window
@@ -18,6 +19,10 @@ Window {
     color: "transparent"
 
     property var launcherClass: launcher // ive been stuck for 3 WHOLE HOURS trying to get this into AppIcon.qml, this was the fix?????
+
+	DesktopList {
+		id: desktopList
+	}
 
     Rectangle {
     	width: parent.width - 20
@@ -38,7 +43,7 @@ Window {
     		anchors.fill: parent
     		cellWidth: 95 + 20
     		cellHeight: 95 + 20
-    		model: apps
+    		model: JSON.parse(desktopList.fetchDesktop())
     		interactive: false
     		keyNavigationEnabled: true
     		// model: launcher.launch_item("vlc", "")
@@ -46,10 +51,15 @@ Window {
     		delegate: AppIcon {
     			// launcher: launcher
     			launcher: window.launcherClass // weird workaround i think, to get launcher function in the element 
-    			name: apps[index].name
-    			src: apps[index].icon.toString() // src is the app icon
-    			path: apps[index].path
+    			name: modelData.name
+    			src: modelData.icon // src is the app icon
+    			path: modelData.path
     		}
        	}
     }
+
+	Component.onCompleted: {
+		console.log(desktopList.fetchDesktop())
+		// const apps = JSON.parse(desktopList.fetchDesktop())
+	}
 }

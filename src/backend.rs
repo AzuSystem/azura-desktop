@@ -21,6 +21,10 @@ pub mod qobject {
         #[qinvokable]
         #[cxx_name = "fetchDesktop"]
         fn fetch_desktop(self: &DesktopList) -> QString;
+
+
+
+
     }
 }
 
@@ -66,7 +70,7 @@ impl qobject::DesktopList {
                         let app = DesktopIcon {
                             name: file_name,
                             entry_type: "app".to_string(),
-                            icon: file_icon,
+                            icon: "file://".to_string() + &file_icon,
                             path: file_exec,
                         };
 

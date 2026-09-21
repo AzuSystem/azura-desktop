@@ -2,7 +2,7 @@ use cxx_qt_lib::{QGuiApplication, QQmlApplicationEngine, QUrl};
 use std::path::Path;
 use std::*;
 
-mod cxxqt_object;
+mod backend;
 
 fn main() {
     let mut app = QGuiApplication::new();
